@@ -1,7 +1,7 @@
 // src/index.ts
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import userRoutes from "./routes";
+import { router } from "./routes/index";
 import { PrismaClient } from "@prisma/client";
 
 dotenv.config();
@@ -15,7 +15,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("User service running");
 });
 
-app.use("/users", userRoutes);
+app.use("/users", router);
 
 // connect to postgres
 const prisma = new PrismaClient();
