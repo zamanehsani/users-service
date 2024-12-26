@@ -5,9 +5,12 @@ const prisma = new PrismaClient();
 
 export const addUser = async (data: any) => {
   try {
-    const user = await prisma.users.create({
-      data,
-    });
+    // if data is not provided or not in the right format, send proper error message to the front
+    if (!data || Object.keys(data).length === 0) {
+      throw new Error("Please provide user data");
+    }
+
+    const user = await prisma.users.create({ data });
     await rabbitmq.publish("users", "user.created", user);
     console.log("user created successfully and published to RabbitMQ");
     return user;
@@ -26,6 +29,7 @@ export const updateUser = async (id: string, data: any) => {
    *
    */
   try {
+    console.log("udating user", id, data);
     const user = await prisma.users.update({
       where: { id },
       data,
@@ -75,7 +79,7 @@ export const getUserBySearch = async (query: any) => {
 
     const whereClause: any = {};
 
-    if (!query) {
+    if (!query || Object.keys(query).length === 0) {
       throw new Error("Please provide at least one search parameter.");
     }
 

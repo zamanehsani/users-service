@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 
 dotenv.config();
 
-const app: Express = express();
+export const app: Express = express();
 const port = process.env.PORT || 3002;
 
 app.use(express.json());
