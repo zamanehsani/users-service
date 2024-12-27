@@ -29,7 +29,7 @@ export const updateUser = async (id: string, data: any) => {
    *
    */
   try {
-    console.log("udating user", id, data);
+    console.log("updating user", id, data);
     const user = await prisma.users.update({
       where: { id },
       data,

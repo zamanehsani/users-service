@@ -7,9 +7,11 @@ import {
   getUserById,
 } from "../controllers";
 
+import { authenticate, authorize } from "../middlewares/index";
+
 export const router = express.Router();
 
-router.post("/", addUser);
+router.post("/", authenticate, authorize, addUser);
 router.patch("/:id", updateUser);
 router.delete("/:id", removeUser);
 router.get("/search", getUserBySearch);

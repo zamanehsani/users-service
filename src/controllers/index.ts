@@ -9,6 +9,8 @@ import {
 
 export const addUser = async (req: Request, res: Response) => {
   try {
+    // check if he can add user
+
     const user = await addUserService(req.body);
     res.status(201).json(user);
   } catch (error: any) {
