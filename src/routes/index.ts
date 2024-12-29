@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addUser,
+  login,
   updateUser,
   removeUser,
   getUserBySearch,
@@ -12,10 +13,8 @@ import { authenticate, authorize } from "../middlewares/index";
 export const router = express.Router();
 
 router.post("/", authenticate, authorize, addUser);
-router.patch("/:id", updateUser);
-router.delete("/:id", removeUser);
-router.get("/search", getUserBySearch);
-router.get("/:id", getUserById);
-
-// add the login and logout routes
-// router.post("/login", login);
+router.patch("/:id", authenticate, authorize, updateUser);
+router.delete("/:id", authenticate, authorize, removeUser);
+router.get("/search", authenticate, authorize, getUserBySearch);
+router.get("/:id", authenticate, authorize, getUserById);
+router.post("/login", login);

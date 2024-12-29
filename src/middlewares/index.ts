@@ -12,29 +12,37 @@ declare module "express-serve-static-core" {
 const SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
 // Middleware to verify token and attach user info to the request
-export const authenticate = (req: Request, res: Response, next: Next) => {
+export const authenticate = (req: Request, res: Response, next: Next): void => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    return next(new Error("Unauthorized: No token provided"));
+    res.status(401).json({ message: "Unauthorized: No token provided" });
+    return;
+    // return next(new Error("Unauthorized: No token provided"));
   }
 
   try {
     const decoded = jwt.verify(token, SECRET);
-    console.log("decoded: ", decoded);
     req.user = decoded; // Attach the user payload (id, role) to the request
+    console.log("req.user is added to the re.user ");
     next();
   } catch (err) {
-    next(err);
-    // return res.status(401).json({ message: "Invalid or expired token" });
+    // next(err);
+    res.status(401).json({ message: "Invalid or expired token" });
   }
 };
 
 // Middleware to check user roles for protected routes
-export const authorize = (req: Request, res: Response, next: Next) => {
-  console.log("req.user: ", req.user);
-  if (!req.user.includes(req.user.role)) {
-    return next(new Error("Unauthorized: Access denied"));
-    //   return res.status(403).json({ message: "Access denied" });
+export const authorize = (req: Request, res: Response, next: Next): void => {
+  console.log("req user roles: ", req.user.roles);
+
+  if (
+    !req.user ||
+    !Array.isArray(req.user.roles) ||
+    !req.user.roles.includes("admin")
+  ) {
+    res.status(403).json({ message: "Access denied" });
+    return;
   }
+  console.log("Authorized");
   next();
 };

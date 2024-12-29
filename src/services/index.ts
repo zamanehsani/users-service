@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import rabbitmq from "../utils/rabbitmt";
+import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
@@ -134,4 +135,35 @@ export const getUserBySearch = async (query: any) => {
     console.error("Error searching users:", error);
     throw new Error(error.message);
   }
+};
+
+export const loginUser = async (email: string, password: string) => {
+  try {
+    if (!email) {
+      throw new Error("Please provide both email");
+    }
+
+    const user = await prisma.users.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const token = generateToken(user);
+
+    return { user, token };
+  } catch (error) {
+    throw new Error("Error logging in user");
+  }
+};
+
+// Implement token generation logic (e.g., JWT)
+const generateToken = (user: any) => {
+  const payload = user;
+  const secret = process.env.JWT_SECRET || "your_jwt_secret";
+  const options = { expiresIn: "1h" };
+
+  return jwt.sign(payload, secret, options);
 };

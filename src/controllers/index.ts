@@ -1,16 +1,26 @@
 import { Request, Response } from "express";
 import {
   addUser as addUserService,
+  loginUser as loginUserService,
   updateUser as updateUserService,
   removeUser as removeUserService,
   getUserBySearch as getUserBySearchService,
   getUserById as getUserByIdService,
 } from "../services";
 
+export const login = async (req: Request, res: Response) => {
+  try {
+    // check if he can login
+    const u = await loginUserService(req.body.email, req.body.password);
+    res.status(200).json(u);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const addUser = async (req: Request, res: Response) => {
   try {
     // check if he can add user
-
     const user = await addUserService(req.body);
     res.status(201).json(user);
   } catch (error: any) {

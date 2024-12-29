@@ -12,13 +12,12 @@ datasource db {
 model Users {
   id           String    @id @default(uuid())
   email        String    @unique
-
   username     String   @default("00000")
   password     String
   firstName    String
   lastName     String
   phoneNumber  String
-  designation  String
+  designation  String 
   roles        String[]
   department   String?
   description  String?
