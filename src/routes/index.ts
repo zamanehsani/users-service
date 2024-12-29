@@ -16,3 +16,6 @@ router.patch("/:id", updateUser);
 router.delete("/:id", removeUser);
 router.get("/search", getUserBySearch);
 router.get("/:id", getUserById);
+
+// add the login and logout routes
+// router.post("/login", login);
