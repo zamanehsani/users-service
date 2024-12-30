@@ -9,8 +9,6 @@ import {
 } from "../controllers";
 import { authenticate, authorizeRoles } from "simple-jwt-auth-middleware";
 
-// import { authenticate, authorize } from "../middlewares/index";
-
 export const router = express.Router();
 const SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 

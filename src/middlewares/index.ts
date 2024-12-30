@@ -1,4 +1,8 @@
 // const jwt = require("jsonwebtoken");
+
+/**
+ * This middleware has been outdated and is replaced by the simple-jwt-auth-middleware package.
+ */
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction as Next } from "express";
 
