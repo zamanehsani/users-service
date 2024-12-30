@@ -7,14 +7,26 @@ import {
   getUserBySearch,
   getUserById,
 } from "../controllers";
+import { authenticate, authorizeRoles } from "simple-jwt-auth-middleware";
 
-import { authenticate, authorize } from "../middlewares/index";
+// import { authenticate, authorize } from "../middlewares/index";
 
 export const router = express.Router();
+const SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
-router.post("/", authenticate, authorize, addUser);
-router.patch("/:id", authenticate, authorize, updateUser);
-router.delete("/:id", authenticate, authorize, removeUser);
-router.get("/search", authenticate, authorize, getUserBySearch);
-router.get("/:id", authenticate, authorize, getUserById);
+router.post("/", authenticate(SECRET), authorizeRoles("admin"), addUser);
+router.patch("/:id", authenticate(SECRET), updateUser);
+router.delete(
+  "/:id",
+  authenticate(SECRET),
+  authorizeRoles("admin"),
+  removeUser
+);
+router.get(
+  "/search",
+  authenticate(SECRET),
+  authorizeRoles("admin"),
+  getUserBySearch
+);
+router.get("/:id", authenticate(SECRET), authorizeRoles("admin"), getUserById);
 router.post("/login", login);
