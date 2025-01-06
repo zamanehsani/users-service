@@ -28,3 +28,5 @@ router.get(
 );
 router.get("/:id", authenticate(SECRET), authorizeRoles("admin"), getUserById);
 router.post("/login", login);
+
+// logging out a user is easy, just remove the token from the client side. and there is not need to have a logout endpoint.
