@@ -12,6 +12,7 @@ export const addUser = async (data: any) => {
     }
 
     const user = await prisma.users.create({ data });
+
     await rabbitmq.publish("users", "user.created", user);
     console.log("user created successfully and published to RabbitMQ");
     return user;
@@ -161,7 +162,7 @@ export const loginUser = async (email: string, password: string) => {
 // Implement token generation logic (e.g., JWT)
 const generateToken = (user: any) => {
   const payload = user;
-  const secret = process.env.JWT_SECRET || "your_jwt_secret";
+  const secret = process.env.JWT_SECRET || "This-is-a-simple-secret";
   const options = { expiresIn: "1h" };
 
   return jwt.sign(payload, secret, options);
