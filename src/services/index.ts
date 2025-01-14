@@ -150,7 +150,6 @@ export const loginUser = async (email: string, password: string) => {
     if (!user) {
       throw new Error("User not found");
     }
-
     const token = generateToken(user);
 
     return { user, token };
@@ -162,8 +161,11 @@ export const loginUser = async (email: string, password: string) => {
 // Implement token generation logic (e.g., JWT)
 const generateToken = (user: any) => {
   const payload = user;
-  const secret = process.env.JWT_SECRET || "This-is-a-simple-secret";
-  const options = { expiresIn: "1h" };
+  const secret: jwt.Secret =
+    process.env.JWT_PRIVATE_KEY || "This-is-a-simple-secret";
+  const options: jwt.SignOptions = {
+    expiresIn: "1h",
+  };
 
   return jwt.sign(payload, secret, options);
 };
